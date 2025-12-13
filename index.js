@@ -26,6 +26,8 @@ foodWebserver.use(express.json())
 //9 tell the server to user router
 foodWebserver.use(router)
 
+//
+foodWebserver.use("/imgUploads",express.static("./imgUploads"))
 
 //3.create port
 const PORT=3000
