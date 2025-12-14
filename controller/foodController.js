@@ -52,3 +52,16 @@ exports.getHotelAddedFoodController=async(req,res)=>{
     
   }
 } 
+//get all foods
+exports.getHomeFoodsController=async(req,res)=>{
+  console.log("Inside get home foods controller");
+try{
+  const homeFoods=await foods.find().sort({_id:-1}).limit(4)
+  res.status(200).json(homeFoods)
+}catch(error){
+  res.status(500).json(error)
+
+}
+   
+  
+}
