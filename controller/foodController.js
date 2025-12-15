@@ -62,6 +62,23 @@ try{
   res.status(500).json(error)
 
 }
-   
-  
-}
+  }
+
+//get all foods
+exports.getAllFoodsController = async (req, res) => {
+  try {
+    const searchKey = req.query.search || "";
+    
+
+    const query = searchKey
+      ? { foodname: { $regex: searchKey, $options: "i" } }
+      : {};
+
+    const getAllFoods = await foods.find(query);
+    res.status(200).json(getAllFoods);
+
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
