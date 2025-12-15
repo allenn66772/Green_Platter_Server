@@ -3,7 +3,7 @@ const { registerController, loginController } = require("./controller/userContro
 const { hotelRegisterController, hotelLoginController } = require("./controller/hotelController")
 const jwtMiddleware = require("./middleware/jwtMiddleware")
 const multerConfig = require("./middleware/imgMulterMiddleware")
-const { addFoodController, getHotelAddedFoodController, getHomeFoodsController, getAllFoodsController } = require("./controller/foodController")
+const { addFoodController, getHotelAddedFoodController, getHomeFoodsController, getAllFoodsController, getAFoodController } = require("./controller/foodController")
 
 
 const router =express.Router()
@@ -29,6 +29,8 @@ router.get("/hotel-added-foods",jwtMiddleware,getHotelAddedFoodController)
 router.get("/home-foods",getHomeFoodsController)   
 ////Get All Foods
 router.get("/all-foods",getAllFoodsController)
+////Get a Food Controller
+router.get("/view-food/:id",jwtMiddleware,getAFoodController)
 
 
 

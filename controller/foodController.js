@@ -81,4 +81,22 @@ exports.getAllFoodsController = async (req, res) => {
     res.status(500).json(error);
   }
 };
+///get a Food Controller
+exports.getAFoodController=async(req,res)=>{
+  console.log("Inside Get aFood Controller");
+
+  const {id}=req.params
+  console.log(id);
+
+  try {
+    const result=await foods.findById({_id:id})
+    res.status(200).json(result)
+    
+  } catch (error) {
+    res.status(500).json(error)
+    
+  }
+  
+  
+}
 
