@@ -54,3 +54,20 @@ exports.hotelLoginController = async (req, res) => {
     res.status(500).json(error);
   }
 };
+///get hotels in hotel profile
+exports.getHotelinProfileController=async(req,res)=>{
+  console.log("Inside Hotels in Profile Controller");
+
+  const userMail=req.payload
+
+  try {
+    const hotelProfile=await hotels.find({email:{$eq:userMail}})
+    res.status(200).json(hotelProfile)
+    
+  } catch (error) {
+    res.status(500).json(error)
+    
+  }
+  
+
+}
