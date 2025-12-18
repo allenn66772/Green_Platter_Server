@@ -18,7 +18,7 @@ const {
   getAFoodController,
 } = require("./controller/foodController");
 const { createOrderController } = require("./controller/orderController");
-const { addToCart } = require("./controller/cartController");
+const { addToCart, getFoodInCart, removeFromCart } = require("./controller/cartController");
 
 const router = express.Router();
 
@@ -55,5 +55,9 @@ router.get("/hotelProfile", jwtMiddleware, getHotelinProfileController);
 router.post("/create-order", jwtMiddleware, createOrderController);
 //
 router.post("/add-to-cart", jwtMiddleware, addToCart);
+//
+router.get("/get-cart", jwtMiddleware, getFoodInCart);
+//delete from cart
+router.delete("/remove-from-cart/:foodId",jwtMiddleware,removeFromCart)
 
 module.exports = router;
