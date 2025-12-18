@@ -14,55 +14,51 @@ const orderSchema = new mongoose.Schema(
           ref: "foods",
           required: true,
         },
-        foodname: {
-          type: String,
+        quantity: {
+          type: Number,
           required: true,
         },
         price: {
           type: Number,
           required: true,
         },
-        quantity: {
-          type: Number,
-          required: true,
-          default: 1,
-        },
-        totalPrice: {
-          type: Number,
-          required: true,
-        },
       },
     ],
+
+    paymentMethod: {
+      type: String,
+      required: true,
+      enum: ["COD", "UPI", "CARD"],
+    },
+
+    deliveryAddress: {
+      fullname: {
+        type: String,
+        required: true,
+      },
+      phone: {
+        type: String,
+        required: true,
+      },
+      address: {
+        type: String,
+        required: true,
+      },
+    },
 
     orderTotal: {
       type: Number,
       required: true,
     },
 
-    paymentMethod: {
+    status: {
       type: String,
-      enum: ["COD", "ONLINE"],
-      default: "COD",
-    },
-
-    orderStatus: {
-      type: String,
-      enum: ["Pending", "Confirmed", "Preparing", "Delivered", "Cancelled"],
       default: "Pending",
-    },
-
-    deliveryAddress: {
-      type: String,
-      required: true,
-    },
-
-    orderedAt: {
-      type: Date,
-      default: Date.now,
     },
   },
   { timestamps: true }
 );
 
-const orders = mongoose.model("orders", orderSchema);
-module.exports = orders;
+// ✅ Prevent OverwriteModelError
+module.exports =
+  mongoose.models.orders || mongoose.model("orders", orderSchema);
