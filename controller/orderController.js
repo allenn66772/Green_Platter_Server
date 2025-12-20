@@ -1,4 +1,4 @@
-const orders = require("../model/orderModel");
+const orders =require("../model/ordermodel")
 const foods = require("../model/foodmodel");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -23,7 +23,7 @@ exports.createOrderController = async (req, res) => {
       if (!food) {
         return res.status(404).json("Food not found");
       }
-
+ 
       // ✅ build order items (schema requires price)
       orderItems.push({
         foodId: food._id,
@@ -97,17 +97,20 @@ exports.createOrderController = async (req, res) => {
   }
 };
 
+
 //view orders
-exports.getAllOrdersController = async (req, res) => {
+exports.getHotelOrdersController = async (req, res) => {
   try {
-    const allOrders = await orders
-      .find()
+    const hotelMail = req.payload; // from hotel JWT
+
+    const hotelOrders = await orders.find({ hotelMail })
       .populate("items.foodId")
       .sort({ createdAt: -1 });
 
-    res.status(200).json(allOrders);
+    res.status(200).json(hotelOrders);
   } catch (error) {
-    console.error("View all orders error:", error);
-    res.status(500).json(error.message);
+    console.error("Get hotel orders error:", error);
+    res.status(500).json("Failed to fetch hotel orders");
   }
 };
+

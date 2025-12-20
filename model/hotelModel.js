@@ -5,6 +5,14 @@ const hotelSchema =new mongoose.Schema({
         type :String,
         required: true
     },
+    phone:{
+        type:Number,
+        default:""
+    },
+    description:{
+        type:String,
+        default:""
+    },
     email:{
         type :String,
         required: true
@@ -28,7 +36,11 @@ const hotelSchema =new mongoose.Schema({
     role:{
         type:String,
         default:"hotel"
+    },
+    uploadImages:{
+        type:Array
     }
+
 })
 
 const hotels = mongoose.model("hotels",hotelSchema)

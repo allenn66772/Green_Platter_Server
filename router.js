@@ -7,6 +7,8 @@ const {
   hotelRegisterController,
   hotelLoginController,
   getHotelinProfileController,
+  updateHotelProfileController,
+  getHotelInfoController,
 } = require("./controller/hotelController");
 const jwtMiddleware = require("./middleware/jwtMiddleware");
 const multerConfig = require("./middleware/imgMulterMiddleware");
@@ -17,8 +19,9 @@ const {
   getAllFoodsController,
   getAFoodController,
 } = require("./controller/foodController");
-const { createOrderController, getAllOrdersController } = require("./controller/orderController");
+const { createOrderController, getAllOrdersController, getHotelOrdersController } = require("./controller/orderController");
 const { addToCart, getFoodInCart, removeFromCart } = require("./controller/cartController");
+const hotelMiddleware = require("./middleware/hotelMiddleware");
 
 const router = express.Router();
 
@@ -34,12 +37,9 @@ router.post("/hotel-register", hotelRegisterController);
 ////Hotel Login
 router.post("/hotel-login", hotelLoginController);
 /////Add-foods
-router.post(
-  "/add-food",
-  jwtMiddleware,
-  multerConfig.array("uploadImages", 3),
-  addFoodController
-);
+router.post("/add-food",hotelMiddleware,multerConfig.array("uploadImages", 3),addFoodController);
+//get hotel info
+router.get("/get-hotel-profile",jwtMiddleware,getHotelInfoController)
 ////Get-Hotel-added-foods
 router.get("/hotel-added-foods", jwtMiddleware, getHotelAddedFoodController);
 ////Get home Foods
@@ -49,8 +49,9 @@ router.get("/all-foods", getAllFoodsController);
 ////Get a Food Controller
 router.get("/view-food/:id", jwtMiddleware, getAFoodController);
 ///Get hotel details in admin
-router.get("/hotelProfile", jwtMiddleware, getHotelinProfileController);
 
+////
+router.put("/update-hotel",hotelMiddleware,multerConfig.fields([{ name: "profile", maxCount: 1 },{ name: "uploadImages", maxCount: 5 }]),updateHotelProfileController);
 ///Order
 router.post("/create-order", jwtMiddleware, createOrderController);
 //
@@ -61,7 +62,7 @@ router.get("/get-cart", jwtMiddleware, getFoodInCart);
 router.delete("/remove-from-cart/:foodId",jwtMiddleware,removeFromCart)
 //stripe
 // router.post("/create-pay", jwtMiddleware, createOrderController);
-router.get("/all-orders", jwtMiddleware, getAllOrdersController);
+router.get("/all-orders",hotelMiddleware, getHotelOrdersController);
 
 
 

@@ -7,6 +7,11 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    hotelMail: {               // 🔥 NEW
+      type: String,
+      required: true,
+    },
+
     items: [
       {
         foodId: {
@@ -59,6 +64,5 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ Prevent OverwriteModelError
-module.exports =
-  mongoose.models.orders || mongoose.model("orders", orderSchema);
+const orders=mongoose.model("orders",orderSchema)
+module.exports=orders
