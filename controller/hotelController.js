@@ -59,40 +59,66 @@ exports.hotelLoginController = async (req, res) => {
 
 ///update hotel profile controller
 exports.updateHotelProfileController = async (req, res) => {
-  console.log("Inside update hotel profile contrller");
-
-  const { hotelname, password, description, phone } = req.body;
-  const email = req.payload;
-  console.log(hotelname, password, description, phone);
-
-  // FIX 1: use existing values instead of undefined variables
-const uploadProfile = req.files?.profile
-    ? req.files.profile[0].filename
-    : req.body.profile;
-    const uploadPhotos = req.files?.uploadImages
-  ? req.files.uploadImages.map((file) => file.filename)
-  : req.body.uploadImages;
-
+  console.log("Inside update hotel profile controller");
 
   try {
-    const updateHotel = await hotels.findOneAndUpdate(
+    const { hotelname, password, description, phone } = req.body;
+    const email = req.payload; // from JWT middleware
+
+    /* ---------------- FILE HANDLING (SINGLE IMAGE) ---------------- */
+
+    // profile image (single)
+    const uploadProfile = req.files?.profile
+      ? req.files.profile[0].filename
+      : undefined;
+
+    // hotel image (single)
+    const uploadHotelImage = req.files?.uploadImages
+      ? req.files.uploadImages[0].filename
+      : undefined;
+
+    /* ---------------- UPDATE OBJECT ---------------- */
+
+    const updateData = {
+      hotelname,
+      description,
+      phone,
+    };
+
+    // update password only if provided
+    if (password) {
+      updateData.password = password;
+    }
+
+    // update profile image only if uploaded
+    if (uploadProfile) {
+      updateData.profile = uploadProfile;
+    }
+
+    // update hotel image only if uploaded
+    if (uploadHotelImage) {
+      updateData.uploadImages = uploadHotelImage;
+    }
+
+    /* ---------------- DB UPDATE ---------------- */
+
+    const updatedHotel = await hotels.findOneAndUpdate(
       { email },
-      {
-        hotelname,
-        password,
-        description,
-        phone,
-        profile: uploadProfile,
-        uploadImages: uploadPhotos,
-      },
+      updateData,
       { new: true }
     );
 
-    res.status(200).json(updateHotel);
+    if (!updatedHotel) {
+      return res.status(404).json("Hotel not found");
+    }
+
+    res.status(200).json(updatedHotel);
   } catch (error) {
-    res.status(500).json(error);
+    console.error(error);
+    res.status(500).json(error.message);
   }
 };
+
 
 //get hotel data
 exports.getHotelInfoController=async(req,res)=>{

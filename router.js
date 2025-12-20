@@ -51,7 +51,7 @@ router.get("/view-food/:id", jwtMiddleware, getAFoodController);
 ///Get hotel details in admin
 
 ////
-router.put("/update-hotel",hotelMiddleware,multerConfig.fields([{ name: "profile", maxCount: 1 },{ name: "uploadImages", maxCount: 5 }]),updateHotelProfileController);
+router.put("/update-hotel",hotelMiddleware,multerConfig.fields([{ name: "profile", maxCount: 1 },{ name: "uploadImages", maxCount: 1 }]),updateHotelProfileController);
 ///Order
 router.post("/create-order", jwtMiddleware, createOrderController);
 //

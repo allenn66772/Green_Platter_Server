@@ -38,7 +38,8 @@ const hotelSchema =new mongoose.Schema({
         default:"hotel"
     },
     uploadImages:{
-        type:Array
+        type:String,
+        default:""
     }
 
 })
