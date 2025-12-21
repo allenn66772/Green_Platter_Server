@@ -136,3 +136,13 @@ exports.getHotelInfoController=async(req,res)=>{
   }
   
 }
+//get all hotel
+exports.getAllHotelsController = async (req, res) => {
+  try {
+    const allHotels = await hotels.find().sort({ createdAt: -1 });
+    res.status(200).json(allHotels);
+  } catch (error) {
+    console.error("Get all hotels error:", error);
+    res.status(500).json("Failed to fetch hotels");
+  }
+};

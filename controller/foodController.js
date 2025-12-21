@@ -99,4 +99,30 @@ exports.getAFoodController=async(req,res)=>{
   
   
 }
+//delete all foods
+exports.deleteHotelFoodController = async (req, res) => {
+  console.log("Inside Delete Hotel Food Controller");
+
+  const { foodId } = req.params;   // ✅ FIXED
+  const userMail = req.payload;
+
+  try {
+    const deletedFood = await foods.findOneAndDelete({
+      _id: foodId,
+      userMail: userMail,
+    });
+
+    if (!deletedFood) {
+      return res.status(404).json("Food not found or not authorized");
+    }
+
+    res.status(200).json({
+      message: "Food deleted successfully",
+      deletedFood,
+    });
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
 

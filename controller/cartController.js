@@ -70,34 +70,37 @@ exports.getFoodInCart = async (req, res) => {
     let subtotal = 0;
     let totalItems = 0;
 
-    // 🧮 Calculate totals
-    const formattedItems = cart.items.map((item) => {
-      const price = item.foodId.price;
-      const quantity = item.quantity;
-      const itemTotal = price * quantity;
+    // ✅ FILTER OUT DELETED FOODS
+    const formattedItems = cart.items
+      .filter((item) => item.foodId) // 🔑 CRITICAL FIX
+      .map((item) => {
+        const price = item.foodId.price;
+        const quantity = item.quantity;
+        const itemTotal = price * quantity;
 
-      subtotal += itemTotal;
-      totalItems += quantity;
+        subtotal += itemTotal;
+        totalItems += quantity;
 
-      return {
-        _id: item._id,
-        foodId: item.foodId,
-        quantity,
-        itemTotal,
-      };
-    });
+        return {
+          _id: item._id,
+          foodId: item.foodId,
+          quantity,
+          itemTotal,
+        };
+      });
 
-    res.status(200).json({
+    return res.status(200).json({
       items: formattedItems,
       subtotal,
       totalItems,
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json("Failed to fetch cart items");
+    console.error("GET CART ERROR:", error);
+    return res.status(500).json("Failed to fetch cart items");
   }
 };
+
 
 ///delete from cart
 exports.removeFromCart = async (req, res) => {
@@ -125,4 +128,5 @@ exports.removeFromCart = async (req, res) => {
     res.status(500).json("Failed to remove item from cart");
   }
 };
+//clear cart
 

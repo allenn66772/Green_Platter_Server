@@ -9,6 +9,7 @@ const {
   getHotelinProfileController,
   updateHotelProfileController,
   getHotelInfoController,
+  getAllHotelsController,
 } = require("./controller/hotelController");
 const jwtMiddleware = require("./middleware/jwtMiddleware");
 const multerConfig = require("./middleware/imgMulterMiddleware");
@@ -18,9 +19,10 @@ const {
   getHomeFoodsController,
   getAllFoodsController,
   getAFoodController,
+  deleteHotelFoodController,
 } = require("./controller/foodController");
-const { createOrderController, getAllOrdersController, getHotelOrdersController } = require("./controller/orderController");
-const { addToCart, getFoodInCart, removeFromCart } = require("./controller/cartController");
+const { createOrderController, getAllOrdersController, getHotelOrdersController, updateOrderStatusController } = require("./controller/orderController");
+const { addToCart, getFoodInCart, removeFromCart, clearCartController } = require("./controller/cartController");
 const hotelMiddleware = require("./middleware/hotelMiddleware");
 
 const router = express.Router();
@@ -63,6 +65,17 @@ router.delete("/remove-from-cart/:foodId",jwtMiddleware,removeFromCart)
 //stripe
 // router.post("/create-pay", jwtMiddleware, createOrderController);
 router.get("/all-orders",hotelMiddleware, getHotelOrdersController);
+//delete
+router.delete("/delete-food/:foodId",hotelMiddleware,deleteHotelFoodController)
+//
+router.put(
+  "/approve-order/:orderId",
+  hotelMiddleware,
+  updateOrderStatusController
+);
+//
+router.get("/all-hotels", getAllHotelsController);
+//clear cart
 
 
 
